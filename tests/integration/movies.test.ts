@@ -6,6 +6,7 @@ import {
   createStreamingService,
 } from "../factories";
 import { cleanDb, disconnectDatabase } from "../helpers";
+import { faker } from '@faker-js/faker';
 
 beforeEach(async () => {
   await cleanDb();
@@ -21,11 +22,7 @@ describe("GET /movies", () => {
   it("should respod with status 200 and with movies data", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
-    const movie = await createMovie(
-      "Mad Max: Estrada da Fúria",
-      streamingService.id,
-      movieGenre.id
-    );
+    const movie = await createMovie(streamingService.id, movieGenre.id);
 
     const response = await server.get("/movies");
 
@@ -53,7 +50,7 @@ describe("POST /movies", () => {
   it("should respond with status 404 when given streaming service doesn't exist", async () => {
     const movieGenre = await createMovieGenre();
     const body = {
-      name: "Mad Max: Estrada da Fúria",
+      name: faker.name.firstName(),
       streaming_service_id: 10000,
       genre_id: movieGenre.id,
     };
@@ -66,7 +63,7 @@ describe("POST /movies", () => {
   it("should respond with status 404 when given movie genre doesn't exist", async () => {
     const streamingService = await createStreamingService();
     const body = {
-      name: "Mad Max: Estrada da Fúria",
+      name: faker.name.firstName(),
       streaming_service_id: streamingService.id,
       genre_id: 1000,
     };
@@ -79,11 +76,7 @@ describe("POST /movies", () => {
   it("should respod with status 409 when movie already exists", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
-    const movie = await createMovie(
-      "Mad Max: Estrada da Fúria",
-      streamingService.id,
-      movieGenre.id
-    );
+    const movie = await createMovie(streamingService.id, movieGenre.id);
     const body = {
       name: movie.name,
       streaming_service_id: movie.streaming_service_id,
@@ -99,7 +92,7 @@ describe("POST /movies", () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const body = {
-      name: "Mad Max: Estrada da Fúria",
+      name: faker.name.firstName(),
       streaming_service_id: streamingService.id,
       genre_id: movieGenre.id,
     };
@@ -126,11 +119,7 @@ describe("PATCH /movies/:id", () => {
   it("should respod with status 200", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
-    const movie = await createMovie(
-      "Mad Max: Estrada da Fúria",
-      streamingService.id,
-      movieGenre.id
-    );
+    const movie = await createMovie(streamingService.id, movieGenre.id);
     const body = {
       rating: 5,
     };
@@ -154,11 +143,7 @@ describe("DELETE /movies/:id", () => {
   it("should respod with status 200", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
-    const movie = await createMovie(
-      "Mad Max: Estrada da Fúria",
-      streamingService.id,
-      movieGenre.id
-    );
+    const movie = await createMovie(streamingService.id, movieGenre.id);
 
     const response = await server.delete(`/movies/${movie.id}`);
 
@@ -170,11 +155,7 @@ describe("GET /movies/genre/:id", () => {
   it("should respond with status 404 when given movie genre doesn't exist", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
-    const movie = await createMovie(
-      "Mad Max: Estrada da Fúria",
-      streamingService.id,
-      movieGenre.id
-    );
+    const movie = await createMovie(streamingService.id, movieGenre.id);
 
     const response = await server.get("/movies/genre/1000");
 
@@ -184,11 +165,7 @@ describe("GET /movies/genre/:id", () => {
   it("should respod with status 200 and with movies data", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
-    const movie = await createMovie(
-      "Mad Max: Estrada da Fúria",
-      streamingService.id,
-      movieGenre.id
-    );
+    const movie = await createMovie(streamingService.id, movieGenre.id);
 
     const response = await server.get(`/movies/genre/${movie.genre_id}`);
 
