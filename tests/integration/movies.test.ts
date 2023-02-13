@@ -6,7 +6,7 @@ import {
   createStreamingService,
 } from "../factories";
 import { cleanDb, disconnectDatabase } from "../helpers";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
 beforeEach(async () => {
   await cleanDb();
@@ -19,7 +19,7 @@ afterAll(async () => {
 const server = supertest(app);
 
 describe("GET /movies", () => {
-  it("should respod with status 200 and with movies data", async () => {
+  it("should respond with status 200 and with movies data", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const movie = await createMovie(streamingService.id, movieGenre.id);
@@ -73,7 +73,7 @@ describe("POST /movies", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("should respod with status 409 when movie already exists", async () => {
+  it("should respond with status 409 when movie already exists", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const movie = await createMovie(streamingService.id, movieGenre.id);
@@ -88,7 +88,21 @@ describe("POST /movies", () => {
     expect(response.status).toEqual(409);
   });
 
-  it("should respod with status 201", async () => {
+  it("should respond with status 422 when given body is invalid", async () => {
+    const streamingService = await createStreamingService();
+    const movieGenre = await createMovieGenre();
+    const movie = await createMovie(streamingService.id, movieGenre.id);
+    const body = {
+      streaming_service_id: movie.streaming_service_id,
+      genre_id: movie.genre_id,
+    };
+
+    const response = await server.post("/movies").send(body);
+
+    expect(response.status).toEqual(422);
+  });
+
+  it("should respond with status 201", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const body = {
@@ -116,7 +130,17 @@ describe("PATCH /movies/:id", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("should respod with status 200", async () => {
+  it("should respond with status 422 when given body is invalid", async () => {
+    await createStreamingService();
+    await createMovieGenre();
+    const body = {};
+
+    const response = await server.patch("/movies/1000").send(body);
+
+    expect(response.status).toEqual(422);
+  });
+
+  it("should respond with status 200", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const movie = await createMovie(streamingService.id, movieGenre.id);
@@ -140,7 +164,7 @@ describe("DELETE /movies/:id", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("should respod with status 200", async () => {
+  it("should respond with status 200", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const movie = await createMovie(streamingService.id, movieGenre.id);
@@ -162,7 +186,7 @@ describe("GET /movies/genre/:id", () => {
     expect(response.status).toEqual(404);
   });
 
-  it("should respod with status 200 and with movies data", async () => {
+  it("should respond with status 200 and with movies data", async () => {
     const streamingService = await createStreamingService();
     const movieGenre = await createMovieGenre();
     const movie = await createMovie(streamingService.id, movieGenre.id);

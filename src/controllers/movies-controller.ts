@@ -31,9 +31,6 @@ export async function getMovies(req: Request, res: Response) {
 
     return res.status(200).send(movies);
   } catch (error) {
-    if (error.name === "NotFoundError") {
-      return res.status(404).send(error.message);
-    }
     return res.sendStatus(500);
   }
 }

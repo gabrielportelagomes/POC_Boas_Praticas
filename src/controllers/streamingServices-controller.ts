@@ -9,10 +9,6 @@ export async function getStreamingServices(req: Request, res: Response) {
 
     return res.status(200).send(streamingServices);
   } catch (error) {
-    console.log(error);
-    if (error.name === "NotFoundError") {
-      return res.status(500).send(error.message);
-    }
     res.sendStatus(500);
   }
 }

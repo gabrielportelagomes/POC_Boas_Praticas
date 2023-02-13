@@ -39,10 +39,6 @@ async function postMovie(
 async function getMovies(): Promise<Movies[]> {
   const movies = await moviesRepositoy.selectMovies();
 
-  if (!movies) {
-    throw notFoundError();
-  }
-
   return movies;
 }
 
@@ -78,10 +74,6 @@ async function getMoviesByGenre(genre_id: number): Promise<Movies[]> {
   }
 
   const movies = await moviesRepositoy.selectMoviesByGenre(genre_id);
-
-  if (!movies) {
-    throw notFoundError();
-  }
 
   return movies;
 }
