@@ -52,6 +52,12 @@ npm run test:migration:run
 npm run test
 ```
 
+5. Run coverage report
+
+```
+npm run test:coverage
+```
+
 ## Routes
 
 ### Movie Genres
